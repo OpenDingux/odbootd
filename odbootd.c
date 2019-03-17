@@ -47,6 +47,7 @@ struct pdata {
 	pthread_t thd;
 	int data_fd;
 	int ep1_fd;
+	const char *fn;
 };
 
 static const struct usb_ffs_strings ffs_strings = {
@@ -83,7 +84,7 @@ static const char * const jzboot_file_paths[] = {
 static void * jzboot_read_data(void *d)
 {
 	struct pdata *pdata = d;
-	uint32_t data_size;
+	uint32_t data_size, transfer_size;
 	ssize_t ret;
 	char buf[4096];
 
@@ -98,8 +99,9 @@ static void * jzboot_read_data(void *d)
 
 	printf("Data size: %u bytes\n", data_size);
 
-	while (data_size) {
-		uint32_t bytes_read, to_read = data_size;
+	for (transfer_size = data_size; transfer_size; ) {
+		uint32_t bytes_read, to_read = transfer_size;
+		unsigned long percent;
 
 		if (to_read > sizeof(buf))
 			to_read = sizeof(buf);
@@ -118,9 +120,15 @@ static void * jzboot_read_data(void *d)
 			break;
 		}
 
-		data_size -= ret;
+		transfer_size -= ret;
 		ret = 0;
+
+		percent = (data_size - transfer_size) * 100 / data_size;
+		printf("\r%s: %lu%%", pdata->fn, percent);
+		fflush(stdout);
 	}
+
+	printf("\n");
 
 	return (void *)ret;
 }
@@ -138,6 +146,7 @@ static int jzboot_open_file(struct pdata *pdata,
 		return -errno;
 
 	pdata->data_fd = ret;
+	pdata->fn = fn;
 
 	ret = pthread_create(&pdata->thd, NULL, jzboot_read_data, pdata);
 	if (ret) {
