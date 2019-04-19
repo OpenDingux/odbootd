@@ -79,6 +79,8 @@ static const char * const jzboot_file_paths[] = {
 	"/boot/rootfs.squashfs",
 	"/boot/uzImage.bin",
 	"/boot/devicetree.dtb",
+	"/boot/ubiboot.bin",
+	"/boot/mininit-syspart",
 };
 
 static void * jzboot_read_data(void *d)
