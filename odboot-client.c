@@ -59,7 +59,7 @@ static int cmd_load_data(libusb_device_handle *hdl, FILE *f, size_t *data_size)
 {
 	int ret, bytes_transferred;
 	size_t size, to_read, bytes_left;
-	unsigned char *data;
+	unsigned char *data, *ptr;
 
 	/* Get the file size */
 	fseek(f, 0, SEEK_END);
@@ -85,18 +85,18 @@ static int cmd_load_data(libusb_device_handle *hdl, FILE *f, size_t *data_size)
 			goto out_free;
 		}
 
-		ret = libusb_bulk_transfer(hdl, LIBUSB_ENDPOINT_OUT | 0x1,
-					   data, (int)bytes_read,
-					   &bytes_transferred, 0);
-		if (ret)
-			goto out_free;
+		for (ptr = data; bytes_read; ) {
+			ret = libusb_bulk_transfer(hdl,
+						   LIBUSB_ENDPOINT_OUT | 0x1,
+						   ptr, (int)bytes_read,
+						   &bytes_transferred, 0);
+			if (ret)
+				goto out_free;
 
-		if (bytes_transferred != (int)bytes_read) {
-			ret = -EINVAL;
-			goto out_free;
+			bytes_left -= bytes_transferred;
+			bytes_read -= bytes_transferred;
+			ptr += bytes_transferred;
 		}
-
-		bytes_left -= bytes_read;
 	}
 
 	printf("Uploaded %zu bytes\n", size);
