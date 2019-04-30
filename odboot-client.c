@@ -58,7 +58,7 @@ static int cmd_control(libusb_device_handle *hdl, uint8_t cmd, uint16_t attr)
 static int cmd_load_data(libusb_device_handle *hdl, FILE *f, size_t *data_size)
 {
 	int ret, bytes_transferred;
-	size_t size, to_read, bytes_left;
+	size_t size, bytes_left;
 	unsigned char *data, *ptr;
 
 	/* Get the file size */
@@ -147,12 +147,14 @@ int main(int argc, char **argv)
 {
 	libusb_context *usb_ctx;
 	libusb_device_handle *hdl = NULL;
-	int exit_code = EXIT_FAILURE;
-	size_t kernel_size;
-	int ret, c;
+	int ret, exit_code = EXIT_FAILURE;
 	unsigned int i;
 	uint16_t pid;
-	char *end;
+
+	if (argc == 1) {
+		usage();
+		return EXIT_FAILURE;
+	}
 
 	ret = libusb_init(&usb_ctx);
 	if (ret) {
@@ -208,7 +210,6 @@ int main(int argc, char **argv)
 	exit_code = EXIT_SUCCESS;
 out_close_dev_handle:
 	libusb_close(hdl);
-out_exit_libusb:
 	libusb_exit(usb_ctx);
 	return exit_code;
 }
