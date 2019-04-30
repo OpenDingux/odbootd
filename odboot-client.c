@@ -185,7 +185,7 @@ int main(int argc, char **argv)
 	printf("Found Ingenic JZ%x based device\n", pid);
 
 	for (i = 0; i < argc - 1; i++) {
-		FILE *f = fopen(argv[i + 1], "r");
+		FILE *f = fopen(argv[i + 1], "rb");
 
 		if (!f) {
 			fprintf(stderr, "Unable to open file %s\n",
