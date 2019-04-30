@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #define MY_NAME			"odboot"
@@ -154,6 +155,11 @@ int main(int argc, char **argv)
 	if (argc == 1) {
 		usage();
 		return EXIT_FAILURE;
+	}
+
+	if (!strcmp("-h", argv[1]) || !strcmp("--help", argv[1])) {
+		usage();
+		return EXIT_SUCCESS;
 	}
 
 	ret = libusb_init(&usb_ctx);
