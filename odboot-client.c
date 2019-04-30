@@ -99,7 +99,7 @@ static int cmd_load_data(libusb_device_handle *hdl, FILE *f, size_t *data_size)
 		}
 	}
 
-	printf("Uploaded %zu bytes\n", size);
+	printf("Uploaded %lu bytes\n", (unsigned long)size);
 
 out_free:
 	free(data);
