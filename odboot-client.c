@@ -110,7 +110,7 @@ out_free:
 static int upload_file(libusb_device_handle *hdl, FILE *f, unsigned int id)
 {
 	uint32_t data_size;
-	int ret;
+	int ret, bytes_transferred;
 
 	fseek(f, 0, SEEK_END);
 	data_size = ftell(f);
@@ -123,7 +123,7 @@ static int upload_file(libusb_device_handle *hdl, FILE *f, unsigned int id)
 	}
 
 	ret = libusb_bulk_transfer(hdl, LIBUSB_ENDPOINT_OUT | 0x1,
-			(unsigned char *)&data_size, 4, NULL, TIMEOUT_MS);
+			(unsigned char *)&data_size, 4, &bytes_transferred, TIMEOUT_MS);
 	if (ret) {
 		fprintf(stderr, "Unable to write data size: %i\n", ret);
 		return ret;
