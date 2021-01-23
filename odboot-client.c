@@ -11,6 +11,8 @@
 
 #define TIMEOUT_MS		10000
 
+extern const char __end_image, __start_image;
+
 struct board {
 	const char *dts_code, *btl_code, *description;
 };
@@ -320,12 +322,15 @@ int main(int argc, char **argv)
 	void *data;
 	int ret;
 
-	if (argc != 3) {
-		printf("Usage:\n\todboot-client vmlinuz.bin od-update.opk\n");
+	if (HAS_BUILTIN_INSTALLER && argc != 2) {
+		printf("Usage:\n\todboot-client od-update.opk\n");
+		return EXIT_FAILURE;
+	} else if (!HAS_BUILTIN_INSTALLER && argc != 3) {
+		printf("Usage:\n\todboot-client od-update.opk vmlinuz.bin\n");
 		return EXIT_FAILURE;
 	}
 
-	opk = opk_open(argv[2]);
+	opk = opk_open(argv[1]);
 	if (!opk) {
 		fprintf(stderr, "Unable to open OPK file\n");
 		return EXIT_FAILURE;
@@ -413,7 +418,13 @@ int main(int argc, char **argv)
 		goto out_close_dev_handle;
 	}
 
-	ret = cmd_load_from_file(hdl, argv[1], 0x81000000, &kernel_size, true);
+	if (HAS_BUILTIN_INSTALLER) {
+		kernel_size = (unsigned long)&__end_image - (unsigned long)&__start_image;
+		ret = cmd_load_data(hdl, (unsigned char *)&__start_image,
+				    0x81000000, kernel_size, true);
+	} else {
+		ret = cmd_load_from_file(hdl, argv[2], 0x81000000, &kernel_size, true);
+	}
 	if (ret) {
 		fprintf(stderr, "Unable to upload kernel\n");
 		goto out_close_dev_handle;
