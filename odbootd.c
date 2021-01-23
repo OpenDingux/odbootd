@@ -125,7 +125,7 @@ static void * jzboot_read_data(void *d)
 		transfer_size -= ret;
 		ret = 0;
 
-		percent = (data_size - transfer_size) * 100 / data_size;
+		percent = (data_size - transfer_size) * 100ull / data_size;
 		printf("\r%s: %lu%%", pdata->fn, percent);
 		fflush(stdout);
 	}
