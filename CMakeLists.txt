@@ -42,25 +42,27 @@ if (WITH_ODBOOT_CLIENT)
 		HAS_BUILTIN_INSTALLER=$<BOOL:${EMBEDDED_INSTALLER}>
 	)
 
-	find_library(LIBOPK_LIBRARIES opk)
-	find_path(LIBOPK_INCLUDE_DIR opk.h)
-	if (NOT LIBOPK_LIBRARIES OR NOT LIBOPK_INCLUDE_DIR)
-		message(SEND_ERROR "Unable to find libopk")
-	endif ()
+	find_package(PkgConfig REQUIRED)
+	pkg_check_modules(OPK QUIET libopk)
+	if (NOT OPK_FOUND)
+		message(FATAL_ERROR "Missing dependency: libini")
+	endif()
 
-	find_library(LIBUSB_LIBRARIES usb-1.0)
-	find_path(LIBUSB_INCLUDE_DIR libusb-1.0/libusb.h)
-	if (NOT LIBUSB_LIBRARIES OR NOT LIBUSB_INCLUDE_DIR)
-		message(SEND_ERROR "Unable to find libusb-1.0")
+	pkg_check_modules(USB QUIET libusb-1.0)
+	if (NOT USB_FOUND)
+		message(FATAL_ERROR "Unable to find libusb-1.0")
 	endif ()
 
 	target_link_libraries(odboot-client PRIVATE
-		${LIBOPK_LIBRARIES}
-		${LIBUSB_LIBRARIES}
+		${OPK_LIBRARIES}
+		${USB_LIBRARIES}
 	)
 	target_include_directories(odboot-client PRIVATE
-		${LIBOPK_INCLUDE_DIR}
-		${LIBUSB_INCLUDE_DIR}
+		${OPK_INCLUDE_DIR}
+		${USB_INCLUDE_DIR}
+	)
+	target_compile_definitions(odboot-client PRIVATE
+		${OPK_CFLAGS_OTHER} ${USB_CFLAGS_OTHER}
 	)
 
 	install(TARGETS odboot-client RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
