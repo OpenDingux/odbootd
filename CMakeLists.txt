@@ -15,6 +15,11 @@ endif (WITH_ODBOOTD)
 if (WITH_ODBOOT_CLIENT)
 	add_executable(odboot-client odboot-client.c)
 
+	option(STATIC_EXE "Compile statically" OFF)
+	if (STATIC_EXE)
+		target_link_options(odboot-client PRIVATE -static)
+	endif ()
+
 	set(EMBEDDED_INSTALLER "" CACHE PATH "Path to the vmlinuz.bin file to embed (optional)")
 	if (EMBEDDED_INSTALLER)
 		file(SIZE ${EMBEDDED_INSTALLER} INSTALLER_SIZE)
