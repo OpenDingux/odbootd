@@ -73,6 +73,7 @@ static const struct board lepus_boards[] = {
 	{ "rs97", "lepus", "Anbernic RS-97 v2.0" },
 	{ "rg300", "lepus", "Anbernic RG-300 non-IPS" },
 	{ "ldkv", "lepus", "LDK (vertical)" },
+	{ "ldkh", "lepus", "LDK (horizontal)" },
 };
 
 static const struct board_group groups[] = {
