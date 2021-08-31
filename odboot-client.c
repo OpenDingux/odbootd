@@ -63,6 +63,7 @@ static const struct board gcw0_boards[] = {
 	{ "rg280v", "rg350", "Anbernic RG-280V" },
 	{ "rg280m", "rg350", "Anbernic RG-280M" },
 	{ "rg300x", "rg350", "Anbernic RG-300X" },
+	{ "pocketgo2", "v20_mddr_512mb", "Wolsen PocketGo2/PlayGo v1" },
 	{ "pocketgo2v2", "rg350", "Wolsen PocketGo2/PlayGo v2" },
 };
 
