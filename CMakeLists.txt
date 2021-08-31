@@ -50,7 +50,7 @@ if (WITH_ODBOOT_CLIENT)
 	find_package(PkgConfig REQUIRED)
 	pkg_check_modules(OPK QUIET libopk)
 	if (NOT OPK_FOUND)
-		message(FATAL_ERROR "Missing dependency: libini")
+		message(FATAL_ERROR "Missing dependency: libopk")
 	endif()
 
 	pkg_check_modules(USB QUIET libusb-1.0)
