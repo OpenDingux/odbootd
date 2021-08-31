@@ -63,8 +63,8 @@ if (WITH_ODBOOT_CLIENT)
 		${USB_LIBRARIES}
 	)
 	target_include_directories(odboot-client PRIVATE
-		${OPK_INCLUDE_DIR}
-		${USB_INCLUDE_DIR}
+		${OPK_INCLUDE_DIRS}
+		${USB_INCLUDE_DIRS}
 	)
 	target_compile_definitions(odboot-client PRIVATE
 		${OPK_CFLAGS_OTHER} ${USB_CFLAGS_OTHER}
