@@ -62,6 +62,10 @@ if (WITH_ODBOOT_CLIENT)
 		${OPK_LIBRARIES}
 		${USB_LIBRARIES}
 	)
+	target_link_directories(odboot-client PRIVATE
+		${OPK_LIBRARY_DIRS}
+		${USB_LIBRARY_DIRS}
+	)
 	target_include_directories(odboot-client PRIVATE
 		${OPK_INCLUDE_DIRS}
 		${USB_INCLUDE_DIRS}
