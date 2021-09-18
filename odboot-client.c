@@ -7,6 +7,23 @@
 #include <string.h>
 #include <unistd.h>
 
+#ifdef _WIN32
+#include <math.h>
+#endif
+
+#ifdef _WIN32
+// strndup() is not available on Windows
+char *strndup( const char *s1, size_t n)
+{
+	if (strlen(s1) < n)
+		return strdup(s1);
+	char *copy= (char*)malloc( n+1 );
+	memcpy( copy, s1, n );
+	copy[n] = 0;
+	return copy;
+};
+#endif
+
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
 #define TIMEOUT_MS		10000
@@ -330,6 +347,12 @@ int main(int argc, char **argv)
 	void *data;
 	int ret;
 
+	// windows bundled libc with mingw does caching of buffers
+	// this call disable caching
+#ifdef _WIN32
+	setbuf(stdout, NULL);
+#endif
+
 	if (HAS_BUILTIN_INSTALLER && argc != 2) {
 		printf("Usage:\n\todboot-client od-update.opk\n");
 		return EXIT_FAILURE;
@@ -367,6 +390,8 @@ int main(int argc, char **argv)
 		fprintf(stderr, "Unable to init libusb\n");
 		return ret;
 	}
+
+	printf("trying to init device 0x%llx 0x%llx\n", groups[group].vid, groups[group].pid);
 
 	hdl = libusb_open_device_with_vid_pid(usb_ctx,
 					      groups[group].vid,
