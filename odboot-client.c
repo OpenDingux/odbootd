@@ -452,7 +452,7 @@ int main(int argc, char **argv)
 	}
 
 	if (HAS_BUILTIN_INSTALLER) {
-		kernel_size = (unsigned long)&__end_image - (unsigned long)&__start_image;
+		kernel_size = (uintptr_t)&__end_image - (uintptr_t)&__start_image;
 		ret = cmd_load_data(hdl, (unsigned char *)&__start_image,
 				    0x81000000, kernel_size, true);
 	} else {
