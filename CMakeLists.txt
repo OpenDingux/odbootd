@@ -58,10 +58,16 @@ if (WITH_ODBOOT_CLIENT)
 		message(FATAL_ERROR "Unable to find libusb-1.0")
 	endif ()
 
-	target_link_libraries(odboot-client PRIVATE
-		${OPK_LIBRARIES}
-		${USB_LIBRARIES}
-	)
+	if (STATIC_EXE)
+		target_link_libraries(odboot-client PRIVATE
+			${OPK_STATIC_LIBRARIES} ${USB_STATIC_LIBRARIES}
+		)
+	else()
+		target_link_libraries(odboot-client PRIVATE
+			${OPK_LIBRARIES} ${USB_LIBRARIES}
+		)
+	endif()
+
 	target_link_directories(odboot-client PRIVATE
 		${OPK_LIBRARY_DIRS}
 		${USB_LIBRARY_DIRS}
