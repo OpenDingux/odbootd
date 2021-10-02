@@ -97,6 +97,7 @@ static const struct board lepus_boards[] = {
 	{ "ldkh", "lepus", "LDK (horizontal)" },
 	{ "gopher2", "gopher2", "Gopher 2 JZ4760" },
 	{ "gopher2b", "gopher2b", "Gopher 2 JZ4760B" },
+	{ "papk3s", "lepus", "PAP KIIIS" },
 };
 
 static const struct board_group groups[] = {
