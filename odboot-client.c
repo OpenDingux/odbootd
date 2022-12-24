@@ -92,6 +92,7 @@ static const struct board rs90_boards[] = {
 };
 
 static const struct board lepus_boards[] = {
+	{ "rs07", "lepus", "Anbernic RS-07 Arcade" },
 	{ "rs97", "lepus", "Anbernic RS-97 v2.0" },
 	{ "rg300", "lepus", "Anbernic RG-300 IPS / RS-97 IPS" },
 	{ "ldkv", "lepus", "LDK (vertical)" },
@@ -99,6 +100,7 @@ static const struct board lepus_boards[] = {
 	{ "gopher2", "gopher2", "Gopher 2 JZ4760" },
 	{ "gopher2b", "gopher2b", "Gopher 2 JZ4760B" },
 	{ "papk3s", "lepus", "PAP KIIIS" },
+	{ "papk3plus", "lepus", "PAP KIII+" },
 };
 
 static const struct board_group groups[] = {
